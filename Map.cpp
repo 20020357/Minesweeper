@@ -40,7 +40,7 @@ void Map (Minesweeper& test)
             {
                 refreshScreen(window, render, texture, mouse, test, count_square);
             }
-            else if (e.button.button ==  SDL_BUTTON_RIGHT)
+            else if (e.button.button ==  SDL_BUTTON_RIGHT && test.button[mouse.x/50][mouse.y/50] == 1)
                 {
                     picture.x = 352; picture.y = 0; picture.h = 32; picture.w = 32;
                     screen.x = (mouse.x/50)*50; screen.y = (mouse.y/50)*50; screen.h = 50; screen.w = 50;
@@ -96,9 +96,23 @@ void youWin (SDL_Rect picture, SDL_Rect screen, Minesweeper test)
     for (int i = 0; i < width; i++)
         for (int j = 0; j < height; j++)
         {
-            picture.x = (test.data[i][j])*32; picture.y = 0; picture.h = 32; picture.w = 32;
+            picture.x = (test.data[i][j])*32;
+            if (test.data[i][j] == BOMB) picture.x = 320;
+            picture.y = 0; picture.h = 32; picture.w = 32;
             screen.x = i*50; screen.y = j*50; screen.h = 50; screen.w = 50;
             test.print(newRenderer, newTexture, picture, screen);
+        }
+    //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    //Mix_Chunk* win = Mix_LoadWAV("Win game.wav");
+    //Mix_PlayChannel(-1, win, 0);
+    for (int i = 0; i < width; i++)
+        for (int j = 0; j < height; j++)
+        {
+            picture.x = (test.data[i][j])*32;
+            picture.y = 0; picture.h = 32; picture.w = 32;
+            screen.x = i*50; screen.y = j*50; screen.h = 50; screen.w = 50;
+            test.print(newRenderer, newTexture, picture, screen);
+            if (test.data[i][j] == BOMB) SDL_Delay(2600/mines);
         }
     SDL_Event e;
     while (true)
@@ -133,4 +147,3 @@ void showBomb (SDL_Rect picture, SDL_Rect screen, SDL_Renderer* renderer, SDL_Te
             }
     SDL_Delay(1000);
 }
-

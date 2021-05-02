@@ -35,3 +35,24 @@
 	<SDL_image.h>
 	<SDL_mixer.h>
 
+1619861363 source:c:\users\administrator\documents\codeblocks\minesweeper\main.cpp
+	<iostream>
+	"Map.h"
+	"Minesweeper.h"
+
+1619874105 c:\users\administrator\documents\codeblocks\minesweeper\map.h
+	"Minesweeper.h"
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+
+1619861363 c:\users\administrator\documents\codeblocks\minesweeper\minesweeper.h
+	<bits/stdc++.h>
+	<SDL.h>
+
+1619919228 source:c:\users\administrator\documents\codeblocks\minesweeper\map.cpp
+	"Map.h"
+
+1619861363 source:c:\users\administrator\documents\codeblocks\minesweeper\minesweeper.cpp
+	"Minesweeper.h"
+

@@ -2,6 +2,13 @@
 #include "Map.h"
 #include "Minesweeper.h"
 
+void game (bool &replay)
+{
+    Minesweeper test;
+	test.creating_map();
+	test.processing_bomb();
+	Map(test, replay);
+}
 
 int main(int argc, char *argv[])
 {
@@ -19,10 +26,11 @@ int main(int argc, char *argv[])
         case 3: width = 30, height = 16, bomb = 99;
     }
 */
-    bool aLive = true;
-	Minesweeper test;
-	test.creating_map();
-	test.processing_bomb();
-	Map(test);
+
+	bool replay = true;
+    while (replay == true)
+    {
+        game(replay);
+    }
 	return 0;
 }

@@ -2,14 +2,14 @@
 
 void Map (Minesweeper& test, bool &replay)
 {
-    SDL_Window* window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width*50, height*50, 0);
+    SDL_Window* window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, test.width*50, test.height*50, 0);
     SDL_Renderer* renderer =  SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_Surface* surface = IMG_Load("Minesweeper.bmp");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_Rect picture; SDL_Rect screen;
     picture.x = 320; picture.y = 0; picture.w = 32; picture.h = 32;
-    for (int i = 0; i < width; i++)
-        for (int j = 0; j < height; j++)
+    for (int i = 0; i < test.width; i++)
+        for (int j = 0; j < test.height; j++)
         {
             screen.x = i*50; screen.y = j*50; screen.h = 50; screen.w = 50;
             test.print(renderer, texture, picture, screen);
@@ -19,7 +19,7 @@ void Map (Minesweeper& test, bool &replay)
     SDL_Rect mouse;
     mouse.x = 400; mouse.y = 300;
     mouse.w = 16; mouse.h = 12;
-    int count = mines, count_square = width*height;
+    int count = test.mines, count_square = test.width*test.height;
     bool win = false, closed = false;
     while (win == false)
     {
@@ -31,10 +31,10 @@ void Map (Minesweeper& test, bool &replay)
             closed = true;
             break;
         }
-        if ((count == 1 && count_square <= 1) || (count == 0 && count_square == 0) || (count_square == mines))
+        if ((count == 1 && count_square <= 1) || (count == 0 && count_square == 0) || (count_square <= test.mines))
         {
             SDL_DestroyWindow(window);
-            count = mines;
+            count = test.mines;
             win = true;
         }
         if (e.type == SDL_MOUSEBUTTONDOWN)
@@ -109,12 +109,12 @@ void youWin (SDL_Rect picture, SDL_Rect screen, Minesweeper test)
     SDL_DestroyWindow(window_win);
 
     // show full map
-    SDL_Window* newWindow = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width*50, height*50, 0);
+    SDL_Window* newWindow = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, test.width*50, test.height*50, 0);
     SDL_Renderer* newRenderer = SDL_CreateRenderer(newWindow, -1, SDL_RENDERER_ACCELERATED);
     SDL_Surface* newSurface = IMG_Load("Minesweeper.bmp");
     SDL_Texture* newTexture = SDL_CreateTextureFromSurface(newRenderer, newSurface);
-    for (int i = 0; i < width; i++)
-        for (int j = 0; j < height; j++)
+    for (int i = 0; i < test.width; i++)
+        for (int j = 0; j < test.height; j++)
         {
             picture.x = (test.data[i][j])*32;
             if (test.data[i][j] == BOMB) picture.x = 320;
@@ -125,13 +125,13 @@ void youWin (SDL_Rect picture, SDL_Rect screen, Minesweeper test)
     //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     //Mix_Chunk* win = Mix_LoadWAV("Win game.wav");
     //Mix_PlayChannel(-1, win, 0);
-    for (int i = 0; i < width; i++)
-        for (int j = 0; j < height; j++)
+    for (int i = 0; i < test.width; i++)
+        for (int j = 0; j < test.height; j++)
         {
             picture.x = (test.data[i][j])*32; picture.y = 0; picture.h = 32; picture.w = 32;
             screen.x = i*50; screen.y = j*50; screen.h = 50; screen.w = 50;
             test.print(newRenderer, newTexture, picture, screen);
-            if (test.data[i][j] == BOMB) SDL_Delay(2600/mines);
+            if (test.data[i][j] == BOMB) SDL_Delay(2600/test.mines);
         }
     SDL_Delay(1000);
     SDL_DestroyWindow(newWindow);
@@ -148,11 +148,12 @@ void youLose (SDL_Rect picture, SDL_Rect screen, Minesweeper test)
     test.print(renderer_lose, texture_lose, picture, screen);
     SDL_Delay(1000);
     SDL_DestroyWindow(window_lose);
+
 }
 void showBomb (SDL_Rect picture, SDL_Rect screen, SDL_Renderer* renderer, SDL_Texture* texture, Minesweeper test)
 {
-    for (int i = 0; i < width; i++)
-        for (int j = 0; j < height; j++)
+    for (int i = 0; i < test.width; i++)
+        for (int j = 0; j < test.height; j++)
             if (test.data[i][j] == BOMB)
             {
                 picture.x = 288; picture.y = 0; picture.h = 32; picture.w = 32;
@@ -167,8 +168,8 @@ void replayGame (SDL_Rect picture, SDL_Rect screen, Minesweeper test, bool &repl
     SDL_Renderer* renderer_replay = SDL_CreateRenderer(replay_game, -1, SDL_RENDERER_ACCELERATED);
     SDL_Surface* surface_replay = IMG_Load("Replay.bmp");
     SDL_Texture* texture_replay = SDL_CreateTextureFromSurface(renderer_replay, surface_replay);
-    picture.x = 0; picture.y = 0; picture.h = 595; picture.w = 1000;
-    screen.x = 0; screen.y = 0; screen.h = 595; screen.w = 1000;
+    picture.x = 0; picture.y = 0; picture.h = 137; picture.w = 270;
+    screen.x = (1000-270)/2; screen.y = (595-137)/2; screen.h = 137; screen.w = 270;
     test.print(renderer_replay, texture_replay, picture, screen);
 
     SDL_Event e;
@@ -181,7 +182,7 @@ void replayGame (SDL_Rect picture, SDL_Rect screen, Minesweeper test, bool &repl
         if (e.type == SDL_MOUSEBUTTONDOWN)
         {
             if (e.button.button == SDL_BUTTON_LEFT)
-                if ((0 < e.button.x && e.button.x < 1000) && (0 < e.button.y && e.button.y < 595))
+                if ((365 < e.button.x && e.button.x < 635) && (229 < e.button.y && e.button.y < 366))
                 {
                     replay = true;
                     run = false;

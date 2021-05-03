@@ -1,5 +1,23 @@
 #include "Minesweeper.h"
 
+void Minesweeper:: options()
+{
+    cout << "Write your option which you want to play: (Width x Height x Mines)" << endl
+         << "1. Easy: 9 x 9 x 10" << endl
+         << "2. Normal: 16 x 16 x 40" << endl
+         << "3. Hard: 30 x 16 x 99" << endl;
+    int n;      cin >> n;
+    switch(n)
+    {
+        case 1: width = height = 9, mines = 10;
+                break;
+        case 2: width = height = 16, mines = 40;
+                break;
+        case 3: width = 30, height = 16, mines = 99;
+                break;
+    }
+}
+
 void Minesweeper:: creating_map ()
 {
 	display.resize(width);
@@ -100,13 +118,3 @@ int Minesweeper:: countSquares (int& squares)
     squares--;
     return squares;
 }
-void Minesweeper:: output ()
-{
-    for (int i = 0; i < width; i++)
-    {
-        for (int j = 0;j < height; j++)
-            cout << display[i][j] << " ";
-        cout << endl;
-    }
-}
-
